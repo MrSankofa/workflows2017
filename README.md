@@ -1,3 +1,3 @@
 # Workflows Course
 
-This project is an example of workflow management for a lynda.com course.
+I am redoing this project to prepare for a DND Website build for the development team.
