@@ -4,7 +4,7 @@
   "description": "A project to showcase workflows",
   "repository": {
     "type": "git",
-    "url": "?.git"
+    "url": "https://github.com/MrSankofa/workflows2017.git"
   },
   "author": "Brett Cunningham",
   "devDependencies": {
