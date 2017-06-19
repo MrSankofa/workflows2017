@@ -6,5 +6,9 @@
     "type": "git",
     "url": "?.git"
   },
-  "author": "Brett Cunningham"
+  "author": "Brett Cunningham",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-util": "^3.0.8"
+  }
 }
