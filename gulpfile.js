@@ -3,6 +3,7 @@ var gulp = require('gulp'),
     coffee = require('gulp-coffee'),
     browserify = require('gulp-browserify'),
     compass = require('gulp-compass'), //why didn't we add a gulp-sass?
+    connect = require('gulp-connect'),
     concat = require('gulp-concat');
 
 var coffeeSources = ['components/coffee/tagline.coffee'];
@@ -13,6 +14,12 @@ var jsSources = [
   'components/scripts/template.js'
 ];
 var sassSources = ['components/sass/style.scss'];
+
+gulp.task('connect', function(){
+  connect.server({
+    root: 'builds/development',
+    livereload: true});
+});
 
 gulp.task('coffee', function() {
   gulp.src(coffeeSources)
@@ -25,6 +32,7 @@ gulp.task('js', function() {
   gulp.src(jsSources)
     .pipe(concat('script.js'))
     .pipe(browserify())
+    .pipe(connect.reload())
     .pipe(gulp.dest('builds/development/js'))
 });
 
@@ -37,6 +45,7 @@ gulp.task('compass', function() {
       comments: true //what does this do again?
     })
     .on('error', gutil.log))
+    .pipe(connect.reload())
     .pipe(gulp.dest('builds/development/css'))
 });
 
@@ -53,5 +62,5 @@ gulp.task('watch', function() {
   gulp.watch('components/sass/*.scss', ['compass']);
 });
 
-gulp.task('default', ['coffee', 'js', 'compass', 'watch']);
+gulp.task('default', ['coffee', 'js', 'compass', 'connect', 'watch']);
 
