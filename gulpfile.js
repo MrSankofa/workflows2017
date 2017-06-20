@@ -40,5 +40,18 @@ gulp.task('compass', function() {
     .pipe(gulp.dest('builds/development/css'))
 });
 
-gulp.task('default', ['coffee', 'js', 'compass']);
+/*So this task 'watch' has a function to watch whatever is specified 
+using the gulp.watch method.
+
+The method used here are watching the coffee script, javascript and sass
+sources, then each time in each method it calls for the corresponding task
+to be ran so that data is moved into development. This sets up live reloading.
+ */
+gulp.task('watch', function() {
+  gulp.watch(coffeeSources, ['coffee']); //dest, redo command
+  gulp.watch(jsSources, ['js']);
+  gulp.watch('components/sass/*.scss', ['compass']);
+});
+
+gulp.task('default', ['coffee', 'js', 'compass', 'watch']);
 
