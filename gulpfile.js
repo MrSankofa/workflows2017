@@ -6,17 +6,35 @@ var gulp = require('gulp'),
     connect = require('gulp-connect'),
     concat = require('gulp-concat');
 
-var coffeeSources = ['components/coffee/tagline.coffee'];
-var jsSources = [
+var coffeeSources,
+  jsSources,
+  htmlSources,
+  jsonSources,
+  sassSources,
+  outputDir,
+  sassStyle;
+
+coffeeSources = ['components/coffee/tagline.coffee'];
+jsSources = [
   'components/scripts/rclick.js',
   'components/scripts/pixgrid.js',
   'components/scripts/tagline.js',
   'components/scripts/template.js'
 ];
 
-var htmlSources = ['builds/development/*.html'];
-var jsonSources = ['builds/development/js/*.json'];
-var sassSources = ['components/sass/style.scss'];
+htmlSources = ['outputDir' + '*.html'];
+jsonSources = ['outputDir' + 'js/*.json'];
+sassSources = ['components/sass/style.scss'];
+
+var env = process.env.NODE_ENV || 'development';
+
+if (env === 'development') {
+  outputDir = 'builds/development/';
+  sassStyle = 'compressed';
+} else {
+  outputDir = 'builds/production/';
+  sassStyle = 'compressed';
+}
 
 gulp.task('json', function() {
   gulp.src(jsonSources)
@@ -24,13 +42,13 @@ gulp.task('json', function() {
 });
 
 gulp.task('html', function() {
-  gulp.src(htmlSources)
+  gulp.src('builds/development/*.html')
   .pipe(connect.reload())
 });
 
 gulp.task('connect', function(){
   connect.server({
-    root: 'builds/development',
+    root: outputDir,
     livereload: true});
 });
 
@@ -46,20 +64,19 @@ gulp.task('js', function() {
     .pipe(concat('script.js'))
     .pipe(browserify())
     .pipe(connect.reload())
-    .pipe(gulp.dest('builds/development/js'))
+    .pipe(gulp.dest(outputDir + 'js'))
 });
 
 gulp.task('compass', function() {
   gulp.src(sassSources)
     .pipe(compass({
       sass: 'components/sass',
-      image: 'builds/development/images', //why is the images here?
-      style: 'expanded',
-      comments: true //what does this do again?
+      image: outputDir + 'images', //why is the images here?
+      style: 'compressed'
     })
     .on('error', gutil.log))
     .pipe(connect.reload())
-    .pipe(gulp.dest('builds/development/css'))
+    .pipe(gulp.dest(outputDir + 'css'))
 });
 
 /*So this task 'watch' has a function to watch whatever is specified 
@@ -73,7 +90,7 @@ gulp.task('watch', function() {
   gulp.watch(coffeeSources, ['coffee']); //dest, redo command
   gulp.watch(jsSources, ['js']);
   gulp.watch('components/sass/*.scss', ['compass']);
-  gulp.watch(htmlSources, ['html']);
+  gulp.watch('builds/development/*.html', ['html']);
   gulp.watch(jsonSources, ['json']);
 });
 
