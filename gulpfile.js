@@ -34,9 +34,11 @@ gulp.task('compass', function() {
       sass: 'components/sass',
       image: 'builds/development/images', //why is the images here?
       style: 'expanded',
-      comments: true
+      comments: true //what does this do again?
     })
     .on('error', gutil.log))
     .pipe(gulp.dest('builds/development/css'))
 });
+
+gulp.task('default', ['coffee', 'js', 'compass']);
 
