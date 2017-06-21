@@ -6,6 +6,7 @@ var gulp = require('gulp'),
     connect = require('gulp-connect'),
     gulpif = require('gulp-if'),
     uglify = require('gulp-uglify'),
+    minifyHTML = require('gulp-minify-html'),
     concat = require('gulp-concat');
 
 var env,
@@ -21,7 +22,7 @@ env = process.env.NODE_ENV || 'development';
 
 if (env==='development') {
   outputDir = 'builds/development/';
-  sassStyle = 'compressed';
+  sassStyle = 'expanded';
 } else {
   outputDir = 'builds/production/';
   sassStyle = 'compressed';
@@ -76,6 +77,8 @@ gulp.task('json', function() {
 
 gulp.task('html', function() {
   gulp.src('builds/development/*.html')
+  .pipe(gulpif( env === 'production', minifyHTML()))
+  .pipe(gulpif( env === 'production', gulp.dest(outputDir)))
   .pipe(connect.reload())
 });
 
