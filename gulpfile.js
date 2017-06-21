@@ -4,6 +4,8 @@ var gulp = require('gulp'),
     browserify = require('gulp-browserify'),
     compass = require('gulp-compass'), //why didn't we add a gulp-sass?
     connect = require('gulp-connect'),
+    gulpif = require('gulp-if'),
+    uglify = require('gulp-uglify'),
     concat = require('gulp-concat');
 
 var env,
@@ -25,7 +27,7 @@ if (env==='development') {
   sassStyle = 'compressed';
 }
 
-coffeeSources = ['components/coffee/tagline.coffee'];
+coffeeSources = ['components/coffee/*.coffee'];
 jsSources = [
   'components/scripts/rclick.js',
   'components/scripts/pixgrid.js',
@@ -48,6 +50,7 @@ gulp.task('js', function() {
   gulp.src(jsSources)
     .pipe(concat('script.js'))
     .pipe(browserify())
+    .pipe(gulpif(env === 'production', uglify()))
     .pipe(connect.reload())
     .pipe(gulp.dest(outputDir + 'js'))
 });
