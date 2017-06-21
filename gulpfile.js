@@ -7,6 +7,7 @@ var gulp = require('gulp'),
     gulpif = require('gulp-if'),
     uglify = require('gulp-uglify'),
     minifyHTML = require('gulp-minify-html'),
+    jsonminify = require('gulp-minify'),
     concat = require('gulp-concat');
 
 var env,
@@ -71,7 +72,9 @@ gulp.task('compass', function() {
 });
 
 gulp.task('json', function() {
-  gulp.src(jsonSources)
+  gulp.src('builds/development/js/*.json')
+  .pipe(gulpif( env === 'production', jsonminify()))
+  .pipe(gulpif( env === 'production', gulp.dest('builds/production/js')))
   .pipe(connect.reload())
 });
 
